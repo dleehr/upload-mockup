@@ -2,4 +2,4 @@
 
 a.cell-field { color: #555; cursor: pointer; cursor: hand;}
 
-.selected { background-color: #eef };
+tr.file-row.selected { background-color: #eef };

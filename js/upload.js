@@ -1,7 +1,9 @@
 angular.module('reflowUploadMockup', ['ui.bootstrap']);
 
 function UploadCtrl($scope) {
-    $scope.cols = ['Project','Site','Cytometer','Acquisition Date','Site Panel','Subject','Visit','Stimulation','Specimen','Pre-treatment','Storage'];
+    $scope.configs = [{name:'Project'},{name:'Site'},{name:'Cytometer'}];
+    $scope.configsSet = false;
+    $scope.cols = ['Acquisition Date','Site Panel','Subject','Visit','Stimulation','Specimen','Pre-treatment','Storage'];
     $scope.choices = {};
     $scope.choices['Project'] = ['Duke Test'];
     $scope.choices['Site'] = ['ID10','ID08'];
@@ -47,5 +49,24 @@ function UploadCtrl($scope) {
         });
         $scope.updateChecks();
     }
+
+    $scope.checkConfigs = function() {
+        var allChecked = true;
+        $scope.configs.forEach( function(config) {
+            allChecked = allChecked && (config.value && config.value != "");
+        });
+        $scope.configsSet = allChecked;
+    }
+
+    $scope.open = function($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        $scope.opened = true;
+  };
+
+  $scope.dateOptions = {
+    'year-format': "'yy'",
+    'starting-day': 1
+  };
 
 }
