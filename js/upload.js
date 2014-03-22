@@ -84,5 +84,6 @@ function UploadCtrl($scope, $interval, $timeout) {
         $timeout(function () { row.status = 'Complete';}, timeOffset * 1000);
         timeOffset += 2;
     });
+    $timeout(function() { $scope.progress = 0; }, timeOffset * 1000);
   }
 }
