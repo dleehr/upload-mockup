@@ -1,0 +1,5 @@
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; cursor: hand;}
+
+a.cell-field { color: #555; cursor: pointer; cursor: hand;}
+
+.selected { background-color: #eef };

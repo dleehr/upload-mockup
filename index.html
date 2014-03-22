@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html ng-app="reflowUploadMockup">
+<head>
+    <title></title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular.min.js"></script>
+    <script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.10.0.min.js"></script>
+    <script src="js/upload.js"></script>
+</head>
+<body>
+<div class="container" ng-controller="UploadCtrl">
+    <div class="row">
+        <p class="lead">You can't drag files but there's some things in this list</p>
+    </div>
+    <div class="row btn-group">
+        <label>Edit selected:</label>
+        <span ng-repeat="col in cols" class="dropdown">
+            <button class="btn btn-default btn-small dropdown-toggle" ng-class="{disabled: checkedRows.length == 0}">
+                <small>{{col}}</small>
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li ng-repeat="choice in choices[col]">
+                    <a ng-click="applyToAll(col,choice)">{{choice}}</a>
+                </li>
+            </ul>
+        </span>
+    </div>
+    <div class="row">
+        &nbsp;
+    </div>
+    <div class="row">
+    <table class="table table-condensed">
+        <thead>
+            <tr>
+                <th><input type="checkbox" ng-model="checkAll" ng-click="toggleAll(checkAll)"> Filename</th>
+                <th ng-repeat="col in cols">{{ col }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="row in rows"
+            ng-class="{selected: row.checked}">
+                <td><input type="checkbox" ng-model="row.checked" ng-change="updateChecks()"> <a ng-click="row.checked = !row.checked; updateChecks()" class="filename cell-field">{{ row['Filename'] }}</a></td>
+                <td ng-repeat="col in cols">
+                    <span class="dropdown">
+                        <a class="dropdown-toggle cell-field">{{ row[col] }} <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li ng-repeat="choice in choices[col]">
+                                <a ng-click="row[col]=choice">{{choice}}</a>
+                            </li>
+                        </ul>
+                 </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+</div>
+</body>
+</html>
