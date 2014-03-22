@@ -1,6 +1,6 @@
 angular.module('reflowUploadMockup', ['ui.bootstrap']);
 
-function UploadCtrl($scope) {
+function UploadCtrl($scope, $interval, $timeout) {
     $scope.configs = [{name:'Project'},{name:'Site'},{name:'Cytometer'}];
     $scope.configsSet = false;
     $scope.cols = ['Acquisition Date','Site Panel','Subject','Visit','Stimulation','Specimen','Pre-treatment','Storage'];
@@ -19,22 +19,18 @@ function UploadCtrl($scope) {
 
     $scope.rows = [];
     $scope.checkedRows = [];
-    
+
     for(var i=0;i<10;i++) {
         var row = {};
         row['Filename'] = 'file00' + i + '.fcs';
-        $scope.cols.forEach( function(col) {
-            if($scope.choices[col]) {
-                row[col] = $scope.choices[col][0]
-            }
-        });
+        row.status = 'New';
         $scope.rows.push(row);
     };
 
     $scope.updateChecks = function() {
         $scope.checkedRows = $scope.rows.filter( function (row) { return row.checked; });
     };
-    
+
     $scope.applyToAll = function(col,choice) {
         $scope.checkedRows.forEach( function(row) {
             if(row.checked) {
@@ -42,7 +38,7 @@ function UploadCtrl($scope) {
             }
         });
     };
-    
+
     $scope.toggleAll = function(checkAll) {
         $scope.rows.forEach( function(row) { 
             row.checked = !checkAll;
@@ -58,15 +54,35 @@ function UploadCtrl($scope) {
         $scope.configsSet = allChecked;
     }
 
-    $scope.open = function($event) {
-        $event.preventDefault();
-        $event.stopPropagation();
-        $scope.opened = true;
+  $scope.progress = 0;
+
+  $scope.remove = function(rows) {
+    var indexes = rows.map(function (row) { return $scope.rows.indexOf(row) }).reverse();
+    indexes.forEach(function (idx) { $scope.rows.splice(idx, 1) });
   };
 
-  $scope.dateOptions = {
-    'year-format': "'yy'",
-    'starting-day': 1
+  $scope.updateProgress = function() {
+    $scope.progress += $scope.uploadIncrement;
   };
 
+  $scope.uploadRows = function(rows) {
+    rows.forEach(function(row) {
+        row.status = 'Uploading';
+    });
+    $scope.uploadingRows = rows;
+    // spend 2s on each file
+    var totalPretendUploadTime = rows.length * 2;
+    // update each file 5 times
+    var updateFrequency = 2.0 / 5.0;
+    var times = totalPretendUploadTime / updateFrequency;
+    $scope.uploadIncrement = 100.0 / times;
+
+    $interval($scope.updateProgress, updateFrequency * 1000, times);
+
+    var timeOffset = 2;
+    rows.forEach(function(row) {
+        $timeout(function () { row.status = 'Complete';}, timeOffset * 1000);
+        timeOffset += 2;
+    });
+  }
 }

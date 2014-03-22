@@ -52,6 +52,7 @@
                 <tr>
                     <th><input type="checkbox" ng-model="checkAll" ng-click="toggleAll(checkAll)"> Filename</th>
                     <th ng-repeat="col in cols">{{ col }}</th>
+                    <th>Status</th>
                 </tr>
             </thead>
             <tbody>
@@ -68,9 +69,26 @@
                             </ul>
                          </span>
                     </td>
+                    <td>{{ row.status }}</td>
                 </tr>
             </tbody>
         </table>
+        </div>
+        <div class="row">
+        </div>
+        <div class="row">
+            <div class="progress col-xs-7">
+              <div class="progress-bar" role="progressbar" aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ progress }}%;">
+                {{ progress }}%
+              </div>
+            </div>
+            <div class="col-xs-5">
+            <span class="pull-right">
+                <button ng-click="remove(checkedRows)" class="btn btn-danger" ng-class="{disabled: checkedRows.length == 0}">Remove <i class="glyphicon glyphicon-remove"></i></button>
+                <button ng-click="uploadRows(checkedRows)" class="btn btn-default" ng-class="{disabled: checkedRows.length == 0}">Upload <i class="glyphicon glyphicon-upload"></i></button>
+                <button ng-click="uploadRows(rows)" class="btn btn-primary" ng-class="{disabled: rows.length == 0}">Upload All <i class="glyphicon glyphicon-upload"></i></button>
+            </span>
+            </div>
         </div>
     </div>
 </div>
